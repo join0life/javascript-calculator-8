@@ -3,10 +3,10 @@ import { Console } from "@woowacourse/mission-utils";
 class App {
   async run() {
     // 1. 값 입력 받기
-    const input = await Console.readLineAsync("값을 입력해주세요: ");
+    const input = await Console.readLineAsync("값을 입력해주세요 : ");
 
     if (input === "") {
-      Console.print("결과: 0");
+      Console.print("결과 : 0");
       return;
     }
 
@@ -29,8 +29,27 @@ class App {
       numbers = normalizedInput.split(/[,:]/); // [1,2,3]
     }
 
-    let sum = numbers.reduce((acc, cur) => acc + Number(cur), 0);
-    Console.print(`결과: ${sum}`);
+    // 4. 에러 처리
+    try {
+      const sum = numbers.reduce((acc, cur) => {
+        const num = Number(cur);
+
+        if (isNaN(num)) {
+          throw new Error("[ERROR] 숫자가 아닙니다");
+        }
+
+        if (num < 0) {
+          throw new Error("[ERROR] 음수는 사용할 수 없습니다");
+        }
+
+        return acc + num;
+      }, 0);
+
+      Console.print(`결과 : ${sum}`);
+    } catch (error) {
+      Console.print(`[ERROR] ${error.message}`);
+      throw error;
+    }
   }
 }
 
